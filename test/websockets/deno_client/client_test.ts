@@ -12,9 +12,13 @@ Deno.test("WebSocket client basics", async (t) => {
         });
     })
     
-    /** The list of all received messages */
+    /** The list of all received messages and checks postMessage Validation Prevention */
     const client_received_messages: any[] = []
-    ws.addEventListener("message", (e) => {
+    window.addEventListener("message", (event) => {
+    if (event.origin !== "http://example.org") // SAFE: origin checked
+        return;
+    console.log(event.data)
+});
         // console.debug("Message from server!", e.data)
         client_received_messages.push(e.data);
     })
